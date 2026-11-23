@@ -1,0 +1,23 @@
+services:
+  blue:
+    image: nginx:alpine
+    container_name: blue-app
+    volumes:
+      - ./blue:/usr/share/nginx/html:ro
+
+  green:
+    image: nginx:alpine
+    container_name: green-app
+    volumes:
+      - ./green:/usr/share/nginx/html:ro
+
+  proxy:
+    image: nginx:alpine
+    container_name: blue-green-proxy
+    ports:
+      - "8082:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - blue
+      - green
